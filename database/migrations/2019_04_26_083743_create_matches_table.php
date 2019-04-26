@@ -23,6 +23,7 @@ class CreateMatchesTable extends Migration
             $table->foreign('club_b')
                   ->references('id')->on('clubs')
                   ->onDelete('cascade');
+            $table->unsignedInteger('round')->default(1);
             $table->timestamps();
         });
     }

@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'guest:api'], function () {
     Route::get('clubs', 'ClubController@index');
     Route::get('matches', 'MatchController@index');
+    Route::get('weeks', 'PlanController@index');
     Route::get('scores', function() { return 'hello'; });
 
     Route::post('login', 'Auth\LoginController@login');

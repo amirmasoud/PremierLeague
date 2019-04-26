@@ -2,6 +2,7 @@
 
 use App\Club;
 use Illuminate\Database\Seeder;
+use Laravel\RoundRobin\RoundRobin;
 
 class MatchesTableSeeder extends Seeder
 {
@@ -13,16 +14,20 @@ class MatchesTableSeeder extends Seeder
     public function run()
     {
         $matches = [];
-        $clubs = Club::get();
 
-        foreach ($clubs as $home) {
-            foreach ($clubs as $away) {
-                if ($home->id == $away->id) {
-                    continue;
-                }
-
-                $matches[] = ['club_a' => $home->id, 'club_b' => $away->id];
+        $roundRobin = new RoundRobin(Club::get()->toArray());
+        $roundRobin->doubleRoundRobin();
+        $roundRobin = $roundRobin->build();
+        $roundIterate = 1;
+        foreach ($roundRobin as $round) {
+            foreach ($round as $match) {
+                $matches[] = [
+                    'club_a' => $match[0]['id'],
+                    'club_b' => $match[1]['id'],
+                    'round'  => $roundIterate
+                ];
             }
+            $roundIterate++;
         }
 
         DB::table('matches')->insert($matches);

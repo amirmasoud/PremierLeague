@@ -156,6 +156,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Laravel\RoundRobin\RoundRobinServiceProvider::class,
 
         /*
          * Application Service Providers...
