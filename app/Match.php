@@ -24,4 +24,9 @@ class Match extends Model
     {
         return $this->belongsTo(Club::class, 'club_b', 'id');
     }
+
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
 }
