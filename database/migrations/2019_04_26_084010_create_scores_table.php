@@ -23,6 +23,7 @@ class CreateScoresTable extends Migration
             $table->foreign('club_id')
                   ->references('id')->on('clubs')
                   ->onDelete('cascade');
+            $table->unsignedInteger('score')->default(0);
             $table->timestamps();
         });
     }

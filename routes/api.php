@@ -28,8 +28,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'guest:api'], function () {
     Route::get('clubs', 'ClubController@index');
     Route::get('matches', 'MatchController@index');
-    Route::get('weeks', 'ScheduleController@index');
-    Route::get('scores', function() { return 'hello'; });
+    Route::get('schedules', 'ScheduleController@index');
+    Route::get('scores', 'ScoreController@index');
+    Route::get('scores/{round}', 'ScoreController@round');
 
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');

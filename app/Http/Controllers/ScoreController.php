@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Score;
+use App\Match;
 use Illuminate\Http\Request;
 
 class ScoreController extends Controller
@@ -14,7 +15,32 @@ class ScoreController extends Controller
      */
     public function index()
     {
-        //
+        return Score::get();
+    }
+
+    /**
+     * Score a given round
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function round($round)
+    {
+        foreach (Match::whereRound($round)->get() as $match) {
+            $awayClub = Match::whereRound($round)->first()->away;
+            $homeClub = Match::whereRound($round)->first()->home;
+            $awayWinningChance = (int) (rand(0, $awayClub->strength)/9);
+            $homeWinningChance = (int) (rand(0, $homeClub->strength)/10);
+            $awayClub->scores()->updateOrCreate(['match_id' => $match->id], [
+                'match_id' => $match->id,
+                'score'    => $awayWinningChance
+            ]);
+            $homeClub->scores()->updateOrCreate(['match_id' => $match->id], [
+                'match_id' => $match->id,
+                'score'    => $homeWinningChance
+            ]);
+        }
+
+        return Score::get();
     }
 
     /**
@@ -46,7 +72,7 @@ class ScoreController extends Controller
      */
     public function show(Score $score)
     {
-        //
+        return $score;
     }
 
     /**

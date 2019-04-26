@@ -14,4 +14,12 @@ class Club extends Model
     protected $fillable = [
         'name', 'strength',
     ];
+
+    /**
+     * Get the scores belongs to a club.
+     */
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
 }

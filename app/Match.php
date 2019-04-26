@@ -14,4 +14,14 @@ class Match extends Model
     protected $fillable = [
         'club_a', 'club_b',
     ];
+
+    public function home()
+    {
+        return $this->belongsTo(Club::class, 'club_a', 'id');
+    }
+
+    public function away()
+    {
+        return $this->belongsTo(Club::class, 'club_b', 'id');
+    }
 }
