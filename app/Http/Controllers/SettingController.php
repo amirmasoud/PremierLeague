@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Artisan;
 
 class SettingController extends Controller
 {
     public function reset()
     {
-        \Artisan::call('migrate:refresh', [
+        Artisan::call('migrate:refresh', [
             '--force' => true,
-            '--seed' => true
+            '--seed'  => true
         ]);
 
         return [];
