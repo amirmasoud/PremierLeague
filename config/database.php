@@ -41,11 +41,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'db4free.net'),
+            'host' => env('DB_HOST', 'ec2-23-23-92-204.compute-1.amazonaws.com'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'premier_league'),
-            'username' => env('DB_USERNAME', 'new_user'),
-            'password' => env('DB_PASSWORD', 'um6SFj92dLECWNR'),
+            'database' => env('DB_DATABASE', 'den1stvbvs5a9g'),
+            'username' => env('DB_USERNAME', 'xlkxymwasefqek'),
+            'password' => env('DB_PASSWORD', 'd05538b3048f620558c7a423914a0386745a64e6f7a1616f0931891b38d9f0d8'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
