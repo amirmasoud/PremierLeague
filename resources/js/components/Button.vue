@@ -3,11 +3,12 @@
     :type="nativeType"
     :disabled="loading || disabled"
     :class="{
-    [`btn-${type}`]: true,
-    'btn-block': block,
-    'btn-lg': large,
-    'btn-loading': loading
-  }"
+      [`btn-${type}`]: true,
+      'btn-block': block,
+      'btn-lg': large,
+      'btn-loading': loading,
+      extraClasses: true
+    }"
     class="btn"
   >
     <slot/>
@@ -47,6 +48,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+
+    extraClasses: {
+      type: String,
+      default: ""
     }
   }
 };

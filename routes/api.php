@@ -18,4 +18,6 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     Route::get('scores/next', 'ScoreController@nextRound');
     Route::get('scores/all', 'ScoreController@allRounds');
+
+    Route::get('reset-data', 'SettingController@reset');
 });

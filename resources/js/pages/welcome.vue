@@ -37,7 +37,7 @@
           </tr>
         </tbody>
       </table>
-      <table v-if="clubs" class="table">
+      <table v-if="clubs && results" class="table">
         <thead>
           <tr>
             <th scope="col">Week {{ weekNumber }} match results</th>
@@ -112,6 +112,7 @@ export default {
   created() {
     this.table();
     this.nextWeek();
+    this.$root.$on("data-reset", this.resetTables);
   },
 
   methods: {
@@ -152,6 +153,12 @@ export default {
 
     score(score, clubId) {
       return _.find(score, o => o.club_id === clubId).score;
+    },
+
+    resetTables() {
+      this.table();
+      this.showPrediction = false;
+      this.results = null;
     }
   }
 };
