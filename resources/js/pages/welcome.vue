@@ -37,13 +37,33 @@
           </tr>
         </tbody>
       </table>
+      <table v-if="clubs" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Week {{ weekNumber }} match results</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="result in results" :key="result.id">
+            <td>
+              <p>
+                {{ result.home.name }}
+                <strong>{{ score(result.scores, result.home.id) }}</strong>
+              </p>
+              <p>
+                {{ result.away.name }}
+                <strong>{{ score(result.scores, result.away.id) }}</strong>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <div class="d-flex justify-content-between">
         <v-button @click.native="playAll()" :loading="loadingPlayAll">Play All</v-button>
         <v-button @click.native="nextWeek()" :loading="loadingNextWeek">Next Week</v-button>
       </div>
     </card>
-    <!-- v-if="showPrediction"  -->
-    <card title="Premier League Table" class="mt-4">
+    <card v-if="showPrediction" title="Premier League Table" class="mt-4">
       <table v-if="clubs" class="table">
         <thead>
           <tr>
@@ -78,11 +98,13 @@ export default {
     loadingPlayAll: false,
     showPrediction: false,
     weekNumber: 1,
-    totalWeek: null
+    totalWeek: null,
+    results: null
   }),
 
   created() {
     this.table();
+    this.nextWeek();
   },
 
   methods: {
@@ -100,6 +122,8 @@ export default {
     async nextWeek() {
       this.loadingNextWeek = true;
       const { data } = await axios.get("/api/scores/next");
+      this.results = data;
+      console.log(this.results);
       this.table();
       this.loadingNextWeek = false;
     },
@@ -117,6 +141,10 @@ export default {
       if (this.weekNumber > parseInt(this.clubs.length) - 1) {
         this.showPrediction = true;
       }
+    },
+
+    score(score, clubId) {
+      return _.find(score, o => o.club_id === clubId).score;
     }
   }
 };

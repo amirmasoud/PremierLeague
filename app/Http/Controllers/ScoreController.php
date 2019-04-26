@@ -55,7 +55,9 @@ class ScoreController extends Controller
     public function nextRound()
     {
         $toPlay = Score::max('match_id') ? Match::find(Score::max('match_id'))->round + 1 : 1;
+        $matches = [];
         foreach (Match::whereRound($toPlay)->get() as $match) {
+            $matches[] = $match->id;
             $awayClub = Club::find($match->club_b);
             $homeClub = Club::find($match->club_a);
             $awayWinningChance = (int) (rand(0, $awayClub->strength)/9);
@@ -78,7 +80,7 @@ class ScoreController extends Controller
             ]);
         }
 
-        return Score::orderBy('club_id')->get();
+        return Match::whereIn('id', $matches)->with('home', 'away', 'scores')->get();
     }
 
     public function allRounds()
