@@ -1,27 +1,32 @@
 <template>
-  <button :type="nativeType" :disabled="loading" :class="{
+  <button
+    :type="nativeType"
+    :disabled="loading || disabled"
+    :class="{
     [`btn-${type}`]: true,
     'btn-block': block,
     'btn-lg': large,
     'btn-loading': loading
-  }" class="btn">
+  }"
+    class="btn"
+  >
     <slot/>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'VButton',
+  name: "VButton",
 
   props: {
     type: {
       type: String,
-      default: 'primary'
+      default: "primary"
     },
 
     nativeType: {
       type: String,
-      default: 'submit'
+      default: "submit"
     },
 
     loading: {
@@ -37,7 +42,12 @@ export default {
     large: {
       type: Boolean,
       default: false
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false
     }
   }
-}
+};
 </script>

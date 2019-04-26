@@ -1,5 +1,5 @@
 <template>
-  <div class="main-layout">
+  <div class="main-layout mb-4">
     <navbar/>
 
     <div class="container mt-4">
@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import Navbar from '~/components/Navbar'
+import Navbar from "~/components/Navbar";
 
 export default {
-  name: 'MainLayout',
+  name: "MainLayout",
 
   components: {
     Navbar
   }
-}
+};
 </script>

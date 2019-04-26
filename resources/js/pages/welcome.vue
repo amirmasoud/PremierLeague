@@ -54,13 +54,20 @@
                 {{ result.away.name }}
                 <strong>{{ score(result.scores, result.away.id) }}</strong>
               </p>
+              <p>
+                <small>Week #{{ result.round }}</small>
+              </p>
             </td>
           </tr>
         </tbody>
       </table>
       <div class="d-flex justify-content-between">
         <v-button @click.native="playAll()" :loading="loadingPlayAll">Play All</v-button>
-        <v-button @click.native="nextWeek()" :loading="loadingNextWeek">Next Week</v-button>
+        <v-button
+          @click.native="nextWeek()"
+          :disabled="totalWeek == weekNumber"
+          :loading="loadingNextWeek"
+        >Next Week</v-button>
       </div>
     </card>
     <card v-if="showPrediction" title="Premier League Table" class="mt-4">
@@ -123,7 +130,6 @@ export default {
       this.loadingNextWeek = true;
       const { data } = await axios.get("/api/scores/next");
       this.results = data;
-      console.log(this.results);
       this.table();
       this.loadingNextWeek = false;
     },
@@ -131,6 +137,7 @@ export default {
     async playAll() {
       this.loadingPlayAll = true;
       const { data } = await axios.get("/api/scores/all");
+      this.results = data;
       this.table();
       this.loadingPlayAll = false;
     },

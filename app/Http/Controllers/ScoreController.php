@@ -90,6 +90,6 @@ class ScoreController extends Controller
             $this->nextRound();
         }
 
-        return [];
+        return Match::with('home', 'away', 'scores')->get();
     }
 }
