@@ -14,9 +14,13 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['middleware' => 'guest:api'], function () {
+    Route::get('standings', 'StandingController@all');
+
     Route::get('clubs', 'ClubController@index');
     Route::get('matches', 'MatchController@index');
     Route::get('schedules', 'ScheduleController@index');
     Route::get('scores', 'ScoreController@index');
+    Route::get('scores/next', 'ScoreController@nextRound');
+    Route::get('scores/all', 'ScoreController@allRounds');
     Route::get('scores/{round}', 'ScoreController@round');
 });
