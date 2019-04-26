@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Club;
 use App\Score;
 use App\Match;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class ScoreController extends Controller
      */
     public function index()
     {
-        return Score::get();
+        return Score::orderBy('match_id')->get();
     }
 
     /**
@@ -26,86 +27,67 @@ class ScoreController extends Controller
     public function round($round)
     {
         foreach (Match::whereRound($round)->get() as $match) {
-            $awayClub = Match::whereRound($round)->first()->away;
-            $homeClub = Match::whereRound($round)->first()->home;
+            $awayClub = Club::find($match->club_b);
+            $homeClub = Club::find($match->club_a);
             $awayWinningChance = (int) (rand(0, $awayClub->strength)/9);
             $homeWinningChance = (int) (rand(0, $homeClub->strength)/10);
-            $awayClub->scores()->updateOrCreate(['match_id' => $match->id], [
+            Score::updateOrCreate([
                 'match_id' => $match->id,
-                'score'    => $awayWinningChance
+                'club_id'  => $awayClub->id,
+            ], [
+                'match_id' => $match->id,
+                'club_id'  => $awayClub->id,
+                'score'    => $awayWinningChance,
             ]);
-            $homeClub->scores()->updateOrCreate(['match_id' => $match->id], [
+            Score::updateOrCreate([
                 'match_id' => $match->id,
-                'score'    => $homeWinningChance
+                'club_id'  => $homeClub->id,
+            ], [
+                'match_id' => $match->id,
+                'club_id'  => $homeClub->id,
+                'score'    => $homeWinningChance,
             ]);
         }
 
-        return Score::get();
+        return Score::orderBy('club_id')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function nextRound()
     {
-        //
+        $toPlay = Score::max('match_id') ? Match::find(Score::max('match_id'))->round + 1 : 1;
+        foreach (Match::whereRound($toPlay)->get() as $match) {
+            $awayClub = Club::find($match->club_b);
+            $homeClub = Club::find($match->club_a);
+            $awayWinningChance = (int) (rand(0, $awayClub->strength)/9);
+            $homeWinningChance = (int) (rand(0, $homeClub->strength)/10);
+            Score::updateOrCreate([
+                'match_id' => $match->id,
+                'club_id'  => $awayClub->id,
+            ], [
+                'match_id' => $match->id,
+                'club_id'  => $awayClub->id,
+                'score'    => $awayWinningChance,
+            ]);
+            Score::updateOrCreate([
+                'match_id' => $match->id,
+                'club_id'  => $homeClub->id,
+            ], [
+                'match_id' => $match->id,
+                'club_id'  => $homeClub->id,
+                'score'    => $homeWinningChance,
+            ]);
+        }
+
+        return Score::orderBy('club_id')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function allRounds()
     {
-        //
-    }
+        $allMatches = (Club::count() - 1) * 2;
+        for ($i=0; $i < $allMatches; $i++) {
+            $this->nextRound();
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Score  $score
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Score $score)
-    {
-        return $score;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Score  $score
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Score $score)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Score  $score
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Score $score)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Score  $score
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Score $score)
-    {
-        //
+        return [];
     }
 }
